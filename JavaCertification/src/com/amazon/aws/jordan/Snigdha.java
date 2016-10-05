@@ -1,32 +1,44 @@
 package com.amazon.aws.jordan;
 
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
+import org.junit.runner.notification.Failure;
 
 public class Snigdha {
 
 	public static void main(String arg[]){
-		System.out.println(movePlane("UDLL"));
-		System.out.println(movePlane("8D2L"));
-		System.out.println(movePlane("4D2RX"));
-		System.out.println(movePlane("8D2L1RX1R"));
-		System.out.println(movePlane("XXX"));
-		System.out.println(movePlane("UK"));
-		System.out.println(movePlane("883434"));
-		System.out.println(movePlane("3450L3450R"));
-		System.out.println(movePlane("9999D9999U"));
-		System.out.println(movePlane(null));
-		System.out.println(movePlane(""));
-		System.out.println(movePlane("8D2L1RXXX"));
+		Result result = JUnitCore.runClasses(SnigdhaTestJunit.class);
+		for (Failure failure : result.getFailures()) {
+	         System.out.println(failure.toString());
+	    }
+	    System.out.println("Time:" + result.getRunTime() +  
+	    		" - successful:" + result.wasSuccessful());
 	}
 	
-	   static String movePlane(String command) {
+	public class PlaneVector{
+		private int magnification;
+		private char direction;
+		public PlaneVector(int magnification, char direction) {
+			super();
+			this.magnification = magnification;
+			this.direction = direction;
+		}
+		public int getMagnification() {
+			return magnification;
+		}
+		public char getDirection() {
+			return direction;
+		}
+	}
+	
+	public String movePlane(String command) {
 		    final String invalid = "(999, 999)"; //invalid command
 		    if(command == null || command.length() == 0)
 		    	return invalid;
 		    long posX =0;
 		    long posY =0;
-		    int lastMagnification = 0;
-		    char lastDirection = 'N';
 	        int endCommandPointer = 0;
+	        java.util.LinkedList<PlaneVector> moves = new java.util.LinkedList<PlaneVector>();
 	        StringBuilder tmpCommand = new StringBuilder();
 	        //Decoding the command string into single commands O(n)
 	        while(endCommandPointer<command.length()){
@@ -55,26 +67,23 @@ public class Snigdha {
      				   				break;
 	            		default : break;
 	            	}
-	            	lastDirection = tmpChar;
-	            	lastMagnification = magnification;
+	            	moves.add(new PlaneVector(magnification,tmpChar));
 	                tmpCommand = new StringBuilder();
 	            }else if(tmpChar == 'X'){
 	            	//Delete last instruction if any
-	                if(lastMagnification > 0 && lastDirection != 'N' ){
-	                	switch(lastDirection){
-		            		case 'U' : posY += -1*lastMagnification;
+	                if(!moves.isEmpty()){
+	                	PlaneVector tmpPlaneVector = moves.removeLast();
+	                	switch(tmpPlaneVector.getDirection()){
+		            		case 'U' : posY += -1*tmpPlaneVector.getMagnification();
 		            				   break;
-		            		case 'D' : posY += lastMagnification;
+		            		case 'D' : posY += tmpPlaneVector.getMagnification();
 	     				   				break;
-		            		case 'L' : posX += lastMagnification;
+		            		case 'L' : posX += tmpPlaneVector.getMagnification();
 	     				   				break;
-		            		case 'R' : posX += -1*lastMagnification;
+		            		case 'R' : posX += -1*tmpPlaneVector.getMagnification();
 	     				   				break;
 	     				   	default : break;
 	                	}
-	                	//RESET DELETE
-	                	lastMagnification = 0;
-	                	lastDirection = 'N';
 	                }
 	            }else{
 	                return invalid; //invalid command
