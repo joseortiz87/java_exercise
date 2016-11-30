@@ -8,17 +8,16 @@ public class FactorialTrailingDigits160 {
 	public static BigInteger BIG_TWO = new BigInteger("2");
 	public static BigInteger BIG_THREE = new BigInteger("3");
 	public static BigInteger BIG_TEN = new BigInteger("10");
+	public static Long MAX_TRAILING_SEVEN = 9999999l;
+	public static Long MAX_TRAILING_FIVE = 99999l;
 	
-	public static ArrayList<BigDecimal> coefficients = new ArrayList<BigDecimal>(); 
-	public static BigDecimal factorA = new BigDecimal(Math.log(2*Math.PI)/2);
+	public static TreeMap<Long,Long> lookupFactorials = new TreeMap<Long,Long>(); 
 	
 	static{
-		coefficients.add(new BigDecimal(109535241009d/48264275462d));
-		coefficients.add(new BigDecimal((double)29944523/19733142));
-		coefficients.add(new BigDecimal((double)22999/22737));
-		coefficients.add(new BigDecimal((double)195/371));
-		coefficients.add(new BigDecimal((double)53/210));
-		coefficients.add(new BigDecimal((double)1/30));
+		lookupFactorials.put(1l, BigInteger.ONE.longValue());
+		lookupFactorials.put(10000000l,94688l); //10000000
+		lookupFactorials.put(100000000l,80992l); //100000000
+		lookupFactorials.put(1000000000l,18976l); //1000000000
 	}
 	
 	public static void main(String args[]){
@@ -34,7 +33,11 @@ public class FactorialTrailingDigits160 {
 				//bigN = doFactorial(bigN);
 				//bigN = digammaFuction(bigN);
 				//System.out.println(doTrailingDigit(bigN.toString(base)));
-				System.out.println(zeroReductionFactorial(bigN).toString(base));
+				//long startTime = System.currentTimeMillis();
+				System.out.println(new BigInteger(zeroReductionFactorial(bigN.longValue()).toString()).toString(base));
+				//long stopTime = System.currentTimeMillis();
+			    //long elapsedTime = stopTime - startTime;
+			    //System.out.println("Time:" + elapsedTime);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
@@ -42,46 +45,101 @@ public class FactorialTrailingDigits160 {
 	}
 	
 	
-	public static BigInteger zeroReductionFactorial(BigInteger bigN){
-		if(bigN.compareTo(BigInteger.ONE) != 1){
-			return BigInteger.ONE;
+	public static Long zeroReductionFactorial(Long bigN){
+		if(lookupFactorials.containsKey(bigN)){
+			return lookupFactorials.get(bigN);
 		}
-		BigInteger counter = BIG_TWO;
-		BigInteger multi = BigInteger.ONE;
-		BigInteger factor = null;
-		BigInteger counter10 = BIG_TWO;
-		while( counter.compareTo(bigN) != 1  ){
+		Long counter = 2l;
+		Long multi = 1l;
+		Long factor = null;
+		Short counter10 = 2;
+		Long counterDec = 1l;
+		Long nextMult10 = 10l;
+		Long maxFactorailValue = lookupFactorials.floorKey(bigN);
+		if(maxFactorailValue != null){
+			counter = maxFactorailValue;
+			multi = lookupFactorials.get(maxFactorailValue);
+			counter10 = 0;
+			counterDec = counter;
+			nextMult10 = getNextMult10(maxFactorailValue);
+		}
+		while( counter <= bigN ){
 			factor = counter;
-			if( counter10.compareTo(BIG_TEN) == 0 ){
-				factor = zeroTrailing(factor);
-				counter10 = BigInteger.ONE;
+			factor = truncateNumber(factor,MAX_TRAILING_SEVEN);
+			if( counter10 == BIG_TEN.shortValue() ){
+				if(counterDec == nextMult10){
+					factor = null;
+					nextMult10 = getNextMult10(nextMult10);
+				}else{
+					factor = zeroTrailingLogPower10(counterDec);
+				}
+				counterDec++;
+				counter10 = 0;
 			}
-			multi = multi.multiply(factor);
-			if( multi.remainder(BIG_TEN).compareTo(BigInteger.ZERO) == 0 ){
-				multi = zeroTrailing(multi);
-			}
-			multi = truncateNumber(multi);
-			counter = counter.add(BigInteger.ONE);
-			counter10 = counter10.add(BigInteger.ONE);
+			if(factor != null && factor > 0)
+				multi = multi*factor;
+			multi = zeroTrailing(multi);
+			multi = truncateNumber(multi,MAX_TRAILING_SEVEN);
+			counter++;
+			counter10 ++;
 		}
-		return multi;
+		lookupFactorials.put(bigN, multi);
+		return truncateNumber(multi,MAX_TRAILING_FIVE);
 	}
 	
-	public static BigInteger zeroTrailing(BigInteger bigN){
+	public static Long getNextMult10(Long nextMult10){
+		return new Long(nextMult10.toString() + "0");
+	}
+	
+	public static Long zeroTrailingLogPower10(Long bigN){
+		Long powerOfTen = (long)Math.log10(bigN);
+		if(powerOfTen == 1){
+			return bigN/BIG_TEN.longValue();
+		}else{
+			Long frontPower = powerOfTen;
+			Long backPower = powerOfTen-1;
+			Long frontPowerNum = 0l;
+			Long backPowerNum = 0l;
+			while(backPower > 0){
+				frontPowerNum = (long)Math.pow(BIG_TEN.doubleValue(), frontPower);
+				backPowerNum = (long)Math.pow(BIG_TEN.doubleValue(), backPower);
+				if(bigN%frontPowerNum == 0){
+					return bigN/frontPowerNum;
+				}
+				if(bigN%backPowerNum == 0){
+					return bigN/backPowerNum;
+				}
+				frontPower--;
+				backPower--;
+			}
+		}
+		return bigN;
+	}
+	
+	public static Long zeroTrailing(Long bigN){
+		if(bigN%BIG_TEN.longValue() == 0){
+			return zeroTrailingLogPower10(bigN);
+		}
+		return bigN;
+	}
+		
+	public static Long zeroTrailingString(Long bigN){
 		String stringFactor = bigN.toString();
 		for(int i=stringFactor.length()-1;i>=0;i--){
 			if(stringFactor.charAt(i) != '0'){
-				return new BigInteger(stringFactor.substring(0, i+1));
+				return new Long(stringFactor.substring(0, i+1));
 			}
 		}
-		return BigInteger.ONE;
+		return BigInteger.ONE.longValue();
 	}
 	
-	public static BigInteger truncateNumber(BigInteger bigN){
-		int numberLength = (int)Math.log10(bigN.intValue())+1;
-		return (numberLength > 7) ? 
-				new BigInteger(bigN.toString().substring(numberLength-7, numberLength)) : 
-					bigN;
+	public static Long truncateNumber(Long bigN,Long trailing){
+		if (bigN > trailing){
+			String numberStr = bigN.toString();
+			int numberLength = numberStr.length();
+			return new Long(numberStr.substring(numberLength-(trailing.toString().length()), numberLength));
+		}  
+		return bigN;
 	}
 	
 	/**
@@ -109,26 +167,7 @@ public class FactorialTrailingDigits160 {
 		}
 		return factorial;
 	}
-	
-	/**
-	 * Digamma Aproximation
-	 * @author joortizs
-	 * @param bigN
-	 * @return
-	 */
-	public static BigInteger digammaFuction(BigInteger bigN){
-		BigDecimal pz = new BigDecimal(0);
-		BigDecimal pk = new BigDecimal(bigN);
-		BigDecimal z = new BigDecimal(bigN);
-		for(BigDecimal an : coefficients){
-			BigDecimal tempZ = new BigDecimal(0);
-			pk = tempZ.add(z).add(an.divide(pk,15,RoundingMode.HALF_UP));
-		}
-		pk = new BigDecimal((double)1/12).divide(pk,15,RoundingMode.HALF_UP);
-		pz = pk.add(factorA).subtract(z).add( (new BigDecimal(bigN).add(new BigDecimal(1/2))).multiply( new BigDecimal(Math.log(z.doubleValue())) ));
-		z = new BigDecimal(Math.exp(pz.doubleValue()));
-		return z.setScale(0, RoundingMode.UP).toBigInteger();
-	}
+
 	
 	public static String doTrailingDigit(String stringFactor){
 		int index = 0;
@@ -143,5 +182,7 @@ public class FactorialTrailingDigits160 {
 		}
 		return stringFactor.substring(index-4, index+1);
 	}
+	
+	
 	
 }

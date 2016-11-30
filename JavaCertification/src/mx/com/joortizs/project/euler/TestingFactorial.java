@@ -12,6 +12,26 @@ public class TestingFactorial {
 		
 		DecimalFormat format = new DecimalFormat("########");
 		System.out.println(number);
+		
+		Long x = new Long(10);
+		System.out.println(x << 10);
+		
+		
+		System.out.println(54010700 + " - " + 
+				FactorialTrailingDigits160.zeroTrailingLogPower10((long)54010700));
+		
+		long startTime = System.currentTimeMillis();
+		Long counter = 10l;
+		while(counter < 1000000000000000000l){
+			/*
+			System.out.println(counter + " - " + 
+					FactorialTrailingDigits160.zeroTrailingLogPower10((long)counter));
+					*/
+			counter = counter+10l;
+		}		
+		long stopTime = System.currentTimeMillis();
+	    long elapsedTime = stopTime - startTime;
+	    System.out.println(elapsedTime);
 	}
 	
 }
