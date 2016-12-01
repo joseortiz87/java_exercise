@@ -10,8 +10,8 @@ package mx.com.joortizs.project.euler;
  */
 public final class PositiveRange implements Cloneable {
 
-    private final Long min;
-    private final Long max;
+    private final Integer min;
+    private final Integer max;
 
     /**
      * Creates a PositiveRange, i.e. a range of integers, such that 0 <= low <=
@@ -23,7 +23,7 @@ public final class PositiveRange implements Cloneable {
      *            The high bound (maximum) of the range.
      * @throws IllegalArgumentException
      */
-    public PositiveRange(final Long low, final Long high) {
+    public PositiveRange(final Integer low, final Integer high) {
         if (!(0 <= low && low <= high)) {
             // Yes, we force the arguments to be ordered
             // to make the calling code more readable.
@@ -53,7 +53,7 @@ public final class PositiveRange implements Cloneable {
      * 
      * @return The minimum of the range.
      */
-    public long getMin() {
+    public Integer getMin() {
         return min;
     }
 
@@ -62,7 +62,7 @@ public final class PositiveRange implements Cloneable {
      * 
      * @return The maximum of the range.
      */
-    public long getMax() {
+    public Integer getMax() {
         return max;
     }
 
@@ -147,7 +147,7 @@ public final class PositiveRange implements Cloneable {
      * 
      * @return The size of the range.
      */
-    public long size() {
+    public int size() {
         return max - min + 1;
     }
 

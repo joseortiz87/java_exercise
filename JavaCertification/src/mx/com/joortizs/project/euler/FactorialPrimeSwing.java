@@ -4,6 +4,7 @@
 // Comments mail to: peter(at)luschny.de
 package mx.com.joortizs.project.euler;
 
+import mx.com.joortizs.project.euler.PrimeSieve.PrimeIteration;
 
 public class FactorialPrimeSwing {
 
@@ -28,30 +29,30 @@ public class FactorialPrimeSwing {
         primeList = new int[pLen];
         sieve = new PrimeSieve(n);
 
-        return recFactorial(n).shiftLeft(n - Integer.bitCount(n));
+        return recFactorial(n) << (n - Long.bitCount(n));
     }
 
-    private Xint recFactorial(int n) {
+    private Long recFactorial(Long n) {
         if (n < 2) {
-            return Xint.ONE;
+            return 1l;
         }
-        return recFactorial(n / 2).square().multiply(swing(n));
+        return (long)Math.pow(recFactorial(n / 2), 2)*swing(n);
     }
 
-    private Xint swing(int n) {
+    private Long swing(Long n) {
         if (n < 33) {
-            return Xint.valueOf(smallOddSwing[n]);
+            return new Long(smallOddSwing[n.intValue()]);
         }
 
         // sieve and primeList initialized in function 'factorial'!
         int sqrtN = (int) Math.floor(Math.sqrt(n));
-        IPrimeIteration pIter0 = sieve.getIteration(3, sqrtN);
-        IPrimeIteration pIter1 = sieve.getIteration(sqrtN + 1, n / 3);
+        PrimeIteration pIter0 = sieve.getIteration(3, sqrtN);
+        PrimeIteration pIter1 = sieve.getIteration(sqrtN + 1, n.intValue() / 3);
 
         int count = 0;
 
-        for (int prime : pIter0) {
-            int q = n, p = 1;
+        for (int prime : pIter0.getSieve().getPrimes()) {
+            int q = n.intValue(), p = 1;
 
             while ((q /= prime) > 0) {
                 if ((q & 1) == 1) {
@@ -64,14 +65,14 @@ public class FactorialPrimeSwing {
             }
         }
 
-        for (int prime : pIter1) {
+        for (int prime : pIter1.getSieve().getPrimes()) {
             if (((n / prime) & 1) == 1) {
                 primeList[count++] = prime;
             }
         }
 
-        Xint prod = sieve.getPrimorial(n / 2 + 1, n);
-        return prod.multiply(primeList, count);
+        Long prod = sieve.getPrimorial(n.intValue() / 2 + 1, n.intValue());
+        return prod*PrimeIteration.product(primeList,0,count);
     }
     
     private static final int[] smallOddSwing = {1, 1, 1, 3, 3, 15, 5, 35, 35, 315, 63, 693, 231, 3003, 429,

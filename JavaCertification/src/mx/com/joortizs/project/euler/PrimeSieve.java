@@ -4,11 +4,6 @@
 // Comments mail to: peter(at)luschny.de
 package mx.com.joortizs.project.euler;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -23,7 +18,6 @@ public class PrimeSieve {
     private final int[] primes;
     private final PositiveRange sieveRange;
     private final PositiveRange primeRange;
-    private static Logger logger;
 
     /**
      * Constructs a prime sieve for the integer range [1,n].
@@ -34,13 +28,17 @@ public class PrimeSieve {
     public PrimeSieve(Long n) {
         primes = new int[getPiHighBound(n)];
         // Note: This forces n>=1
-        sieveRange = new PositiveRange(1l, n);
+        sieveRange = new PositiveRange(1, n.intValue());
 
         int numberOfPrimes = makePrimeList(n);
         primeRange = new PositiveRange(1, numberOfPrimes);
     }
+    
+    public int[] getPrimes() {
+		return primes;
+	}
 
-    /**
+	/**
      * Prime number sieve, Eratosthenes (276-194 b. t.) This implementation
      * considers only multiples of primes greater than 3, so the smallest value
      * has to be mapped to 5.
@@ -101,8 +99,8 @@ public class PrimeSieve {
      *            Upper bound of the sieve.
      * @return Number of primes found.
      */
-    private int makePrimeList(long n) {
-        boolean[] composite = new boolean[n / 3];
+    private int makePrimeList(Long n) {
+        boolean[] composite = new boolean[n.intValue() / 3];
 
         sieveOfEratosthenes(composite);
 
@@ -145,7 +143,6 @@ public class PrimeSieve {
      *            The index of the prime number.
      * @return The n-th prime number.
      */
-    @Override
     public int getNthPrime(int n) {
         primeRange.containsOrFail(n);
         return primes[n - 1];
@@ -158,7 +155,6 @@ public class PrimeSieve {
      *            The number to be checked.
      * @return True if and only if the given number is prime.
      */
-    @Override
     public boolean isPrime(int cand) {
         // The candidate is interpreted as an one point interval!
         int primeMax = primeRange.getMax();
@@ -172,8 +168,7 @@ public class PrimeSieve {
      * 
      * @return An iteration over all prime numbers found by the sieve.
      */
-    @Override
-    public IPrimeIteration getIteration() {
+    public PrimeIteration getIteration() {
         return new PrimeIteration(this);
     }
 
@@ -187,8 +182,7 @@ public class PrimeSieve {
      * @return An iteration of the prime numbers which are in the interval [low,
      *         high].
      */
-    @Override
-    public IPrimeIteration getIteration(int low, int high) {
+    public PrimeIteration getIteration(int low, int high) {
         return new PrimeIteration(this, new PositiveRange(low, high));
     }
 
@@ -199,8 +193,7 @@ public class PrimeSieve {
      *            The range of the iteration.
      * @return The prime number iteration.
      */
-    @Override
-    public IPrimeIteration getIteration(PositiveRange range) {
+    public PrimeIteration getIteration(PositiveRange range) {
         return new PrimeIteration(this, range);
     }
 
@@ -214,7 +207,7 @@ public class PrimeSieve {
      * @return The product of the prime numbers which are in the interval [low,
      *         high].
      */
-    public Xint getPrimorial(int low, int high) {
+    public Long getPrimorial(int low, int high) {
         return new PrimeIteration(this, new PositiveRange(low, high)).primorial();
     }
 
@@ -225,7 +218,7 @@ public class PrimeSieve {
      *            The range of the iteration.
      * @return The product of the prime numbers in the range.
      */
-    public Xint getPrimorial(PositiveRange range) {
+    public Long getPrimorial(PositiveRange range) {
         return new PrimeIteration(this, range).primorial();
     }
 
@@ -236,7 +229,7 @@ public class PrimeSieve {
      * @author Peter Luschny
      * @version 2004-09-12
      */
-    private static class PrimeIteration implements IPrimeIteration {
+    public static class PrimeIteration {
 
         private final PrimeSieve sieve;
         private final PositiveRange sieveRange;
@@ -299,8 +292,7 @@ public class PrimeSieve {
          * 
          * @return An iterator over the current prime number list.
          */
-        @Override
-        public Iterator<Integer> iterator() {
+        public PrimeIteration iterator() {
             PrimeIteration result = this;
 
             if (0 != state.getAndIncrement()) {
@@ -317,7 +309,6 @@ public class PrimeSieve {
          * 
          * @return The next prime number in the iteration.
          */
-        @Override
         public Integer next() {
             return sieve.primes[current++];
         }
@@ -327,7 +318,6 @@ public class PrimeSieve {
          * 
          * @return True iff there are more prime numbers to be enumerated.
          */
-        @Override
         public boolean hasNext() {
             return current < end;
         }
@@ -338,7 +328,6 @@ public class PrimeSieve {
          * 
          * @throws UnsupportedOperationException
          */
-        @Override
         public void remove() {
             throw new UnsupportedOperationException();
         }
@@ -391,7 +380,6 @@ public class PrimeSieve {
          * 
          * @return Cardinality of primes in iteration range.
          */
-        @Override
         public int getNumberOfPrimes() {
             if (0 == primeRange.getMax()) // If primeRange is empty...
             {
@@ -407,7 +395,6 @@ public class PrimeSieve {
          * @return Ratio of the number of primes relative to the number of
          *         integers in this iteration.
          */
-        @Override
         public double getPrimeDensity() {
             // Note: By construction sieveRange.size is always != 0.
             return (double) primeRange.size() / (double) sieveRange.size();
@@ -418,7 +405,6 @@ public class PrimeSieve {
          * 
          * @return sieved interval.
          */
-        @Override
         public PositiveRange getSieveRange() {
             return (PositiveRange) sieveRange.clone();
         }
@@ -429,7 +415,6 @@ public class PrimeSieve {
          * 
          * @return Range of indices.
          */
-        @Override
         public PositiveRange getPrimeRange() {
             return (PositiveRange) primeRange.clone();
         }
@@ -439,7 +424,6 @@ public class PrimeSieve {
          * 
          * @return An array of prime numbers representing the iteration.
          */
-        @Override
         public int[] toArray() {
             int primeCard = primeRange.size();
             int[] primeList = new int[primeCard];
@@ -454,119 +438,68 @@ public class PrimeSieve {
          * 
          * @return The product of all primes in the range of the iteration.
          */
-        public Xint primorial() {
+        public Long primorial() {
             if (0 == primeRange.getMax()) // if primeRange is empty...
             {
-                return Xint.ONE;
+                return 1l;
             }
-            return Xint.product(sieve.primes, start, primeRange.size());
+            return product(sieve.primes, start, primeRange.size());
         }
+        
+        // <returns>a[start]*a[start+1]*...*a[start+length-1]</returns>
+        public static Long product(int[] a, int start, int length) {
+        // Assert((0 <= start) & (length <= a.length),
 
-        /**
-         * Writes the primes iteration to a file.
-         * 
-         * @param fileName
-         *            Name of the file to write to.
-         * @param format
-         *            The print-format requested.
-         */
-        @Override
-        public void toFile(String fileName, PrintOption format) {
-            try {
-                PrintWriter primeReport = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-
-                switch (format) {
-                    case CommaSeparated:
-                        writeComma(primeReport);
-                        break;
-                    case FormattedText:
-                        writeFormatted(primeReport);
-                        break;
-                    case Xml:
-                        writeXml(primeReport);
-                        break;
-                    default:
-                        writeComma(primeReport);
-                        break;
-                }
-
-                primeReport.close();
-            } catch (IOException e) {
-                if (null != logger) {
-                    logger.severe(e.toString());
-                }
-            }
-        }
-
-        /**
-         * Prints the list of prime numbers in a formatted way to a file.
-         * 
-         * @param file
-         *            The file to be printed to.
-         */
-        private void writeFormatted(PrintWriter file) {
-            file.println("SieveRange   " + sieveRange.toString() + " : " + sieveRange.size());
-            file.println("PrimeRange   " + primeRange.toString() + " : " + primeRange.size());
-            file.println("PrimeDensity " + getPrimeDensity());
-
-            int primeOrdinal = start;
-            int primeLow = sieve.primes[start];
-            int lim = (primeLow / 100) * 100;
-
-            for (int prime : this) {
-                primeOrdinal++;
-
-                if (prime >= lim) {
-                    lim += 100;
-
-                    file.println();
-                    file.print('<');
-                    file.print(primeOrdinal);
-                    file.print(".> ");
-                }
-
-                file.print(prime);
-                file.print(' ');
+            if (length == 0) {
+                return 1l;
             }
 
-            file.println();
-        }
+            int len = (length + 1) / 2;
+            long[] b = new long[len];
 
-        /**
-         * Prints the list of primes in a comma separated format to a file.
-         * 
-         * @param file
-         *            The file to be printed to.
-         */
-        private void writeComma(PrintWriter file) {
-            for (int prime : this) {
-                file.print(prime);
-                file.print(',');
-            }
-        }
+            int i, j, k;
 
-        /**
-         * Prints the list of prime numbers in XML format to a file.
-         * 
-         * @param file
-         *            The file to be printed to.
-         */
-        private void writeXml(PrintWriter file) {
-            int primeOrdinal = start;
-
-            file.println("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>");
-            file.println("<primes>");
-
-            for (int prime : this) {
-                primeOrdinal++;
-                file.print("<ol>(");
-                file.print(primeOrdinal);
-                file.print(',');
-                file.print(prime);
-                file.println(")</ol>");
+            for (k = 0, i = start, j = start + length - 1; i < j; i++, k++, j--) {
+                b[k] = a[i] * (long) a[j];
             }
 
-            file.println("</primes>");
+            if (i == j) {
+                b[k++] = a[j];
+            }
+
+            // Assert(k > 0)
+
+            // if(k > PARALLEL_THRESHOLD)
+            // {
+            // var pro = Task.Factory.StartNew<Xint>(() =>
+            // {
+            // return RecProduct(b, (k - 1) / 2 + 1, k - 1);
+            // });
+            //
+            // var left = RecProduct(b, 0, (k - 1) / 2);
+            // var right = pro.Result;
+            // return left * right;
+            // }
+
+            return recProduct(b, 0, k - 1);
         }
+        
+        public static long recProduct(long[] s, int n, int m) {
+            if (n > m) {
+                return 1l;
+            }
+            if (n == m) {
+                return s[n];
+            }
+
+            int k = (n + m) >> 1;
+            return recProduct(s, n, k)*recProduct(s, k + 1, m);
+        }
+
+		public PrimeSieve getSieve() {
+			return sieve;
+		}
+        
+
     } // endOfPrimeIteration
 } // endOfPrimeSieve
