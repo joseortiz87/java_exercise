@@ -4,6 +4,8 @@
 // Comments mail to: peter(at)luschny.de
 package mx.com.joortizs.project.euler;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -15,7 +17,7 @@ import java.util.logging.Logger;
  */
 public class PrimeSieve {
 
-    private final int[] primes;
+    private final Integer[] primes;
     private final PositiveRange sieveRange;
     private final PositiveRange primeRange;
 
@@ -26,7 +28,7 @@ public class PrimeSieve {
      *            The upper bound of the range to be sieved.
      */
     public PrimeSieve(Long n) {
-        primes = new int[getPiHighBound(n)];
+        primes = new Integer[getPiHighBound(n)];
         // Note: This forces n>=1
         sieveRange = new PositiveRange(1, n.intValue());
 
@@ -34,7 +36,7 @@ public class PrimeSieve {
         primeRange = new PositiveRange(1, numberOfPrimes);
     }
     
-    public int[] getPrimes() {
+    public Integer[] getPrimes() {
 		return primes;
 	}
 
@@ -104,7 +106,7 @@ public class PrimeSieve {
 
         sieveOfEratosthenes(composite);
 
-        int[] prime = this.primes; // -- on stack for eff.
+        Integer[] prime = this.primes; // -- on stack for eff.
         boolean toggle = false;
         int p = 5, i = 0, j = 2;
 
@@ -182,8 +184,8 @@ public class PrimeSieve {
      * @return An iteration of the prime numbers which are in the interval [low,
      *         high].
      */
-    public PrimeIteration getIteration(int low, int high) {
-        return new PrimeIteration(this, new PositiveRange(low, high));
+    public java.util.List<Integer> getIteration(int low, int high) {
+    	return Arrays.asList(this.getPrimes()).subList(low, high);
     }
 
     /**
@@ -346,7 +348,7 @@ public class PrimeSieve {
          *            Upper bound for the index.
          * @return The index of the prime number.
          */
-        static int indexOf(final int[] data, int value, int low, int high) {
+        static int indexOf(final Integer[] data, int value, int low, int high) {
             while (low < high) {
                 // int mid = low + ((high - low) / 2);
                 // Probably faster, and arguably as clear is:
@@ -447,7 +449,7 @@ public class PrimeSieve {
         }
         
         // <returns>a[start]*a[start+1]*...*a[start+length-1]</returns>
-        public static Long product(int[] a, int start, int length) {
+        public static Long product(Integer[] a, int start, int length) {
         // Assert((0 <= start) & (length <= a.length),
 
             if (length == 0) {

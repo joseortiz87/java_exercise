@@ -9,7 +9,7 @@ import mx.com.joortizs.project.euler.PrimeSieve.PrimeIteration;
 public class FactorialPrimeSwing {
 
     private PrimeSieve sieve;
-    private int[] primeList;
+    private Integer[] primeList;
     
     private static final long[] smallFactorials = {1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800, 479001600,
             6227020800L, 87178291200L, 1307674368000L, 20922789888000L, 355687428096000L,
@@ -26,7 +26,7 @@ public class FactorialPrimeSwing {
         }
 
         int pLen = (int) (2.0 * Math.floor(Math.sqrt(n) + n / (log2(n) - 1)));
-        primeList = new int[pLen];
+        primeList = new Integer[pLen];
         sieve = new PrimeSieve(n);
 
         return recFactorial(n) << (n - Long.bitCount(n));
@@ -46,15 +46,15 @@ public class FactorialPrimeSwing {
 
         // sieve and primeList initialized in function 'factorial'!
         int sqrtN = (int) Math.floor(Math.sqrt(n));
-        PrimeIteration pIter0 = sieve.getIteration(3, sqrtN);
-        PrimeIteration pIter1 = sieve.getIteration(sqrtN + 1, n.intValue() / 3);
+        java.util.List<Integer> pIter0 = sieve.getIteration(3, sqrtN);
+        java.util.List<Integer> pIter1 = sieve.getIteration(sqrtN + 1, n.intValue() / 3);
 
         int count = 0;
 
-        for (int prime : pIter0.getSieve().getPrimes()) {
+        for (int prime : pIter0) {
             int q = n.intValue(), p = 1;
 
-            while ((q /= prime) > 0) {
+            while (prime != 0 && (q /= prime) > 0) {
                 if ((q & 1) == 1) {
                     p *= prime;
                 }
@@ -65,8 +65,8 @@ public class FactorialPrimeSwing {
             }
         }
 
-        for (int prime : pIter1.getSieve().getPrimes()) {
-            if (((n / prime) & 1) == 1) {
+        for (int prime : pIter1) {
+            if (prime != 0 && ((n / prime) & 1) == 1) {
                 primeList[count++] = prime;
             }
         }
