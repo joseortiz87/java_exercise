@@ -1,0 +1,133 @@
+
+
+Stats at Time: 10 seconds...
+Number of request: 16209
+Number of proccessed request: 10630
+Current queue size: 0
+Request/sec: 1620.0
+Proccess/sec: 1063.0
+Server utilization: 0.6561728395061729
+Probability of k message in server queue: 0.04182456478752966
+Avarage number of message in the queue: 1.908438061041293
+Actual Avarage queue size: 4.0
+
+Stats at Time: 20 seconds...
+Number of request: 16325
+Number of proccessed request: 10707
+Current queue size: 0
+Request/sec: 816.0
+Proccess/sec: 535.0
+Server utilization: 0.6556372549019608
+Probability of k message in server queue: 0.041719037233608425
+Avarage number of message in the queue: 1.903914590747331
+Actual Avarage queue size: 2.0
+
+Stats at Time: 30 seconds...
+Number of request: 16325
+Number of proccessed request: 10707
+Current queue size: 0
+Request/sec: 544.0
+Proccess/sec: 356.0
+Server utilization: 0.6544117647058824
+Probability of k message in server queue: 0.04147767849470773
+Avarage number of message in the queue: 1.8936170212765957
+Actual Avarage queue size: 0.0
+
+Stats at Time: 40 seconds...
+Number of request: 16325
+Number of proccessed request: 10707
+Current queue size: 0
+Request/sec: 408.0
+Proccess/sec: 267.0
+Server utilization: 0.6544117647058824
+Probability of k message in server queue: 0.04147767849470773
+Avarage number of message in the queue: 1.8936170212765957
+Actual Avarage queue size: 0.0
+
+Stats at Time: 50 seconds...
+Number of request: 16325
+Number of proccessed request: 10707
+Current queue size: 0
+Request/sec: 326.0
+Proccess/sec: 214.0
+Server utilization: 0.656441717791411
+Probability of k message in server queue: 0.041877552235117195
+Avarage number of message in the queue: 1.9107142857142856
+Actual Avarage queue size: 0.0
+
+Stats at Time: 60 seconds...
+Number of request: 16325
+Number of proccessed request: 10707
+Current queue size: 0
+Request/sec: 272.0
+Proccess/sec: 178.0
+Server utilization: 0.6544117647058824
+Probability of k message in server queue: 0.04147767849470773
+Avarage number of message in the queue: 1.8936170212765957
+Actual Avarage queue size: 0.0
+
+Stats at Time: 70 seconds...
+Number of request: 16325
+Number of proccessed request: 10707
+Current queue size: 0
+Request/sec: 233.0
+Proccess/sec: 152.0
+Server utilization: 0.6523605150214592
+Probability of k message in server queue: 0.04107404101544291
+Avarage number of message in the queue: 1.8765432098765429
+Actual Avarage queue size: 0.0
+
+Stats at Time: 80 seconds...
+Number of request: 16327
+Number of proccessed request: 10707
+Current queue size: 0
+Request/sec: 204.0
+Proccess/sec: 133.0
+Server utilization: 0.6519607843137255
+Probability of k message in server queue: 0.04099543971549816
+Avarage number of message in the queue: 1.8732394366197185
+Actual Avarage queue size: 0.0
+
+Stats at Time: 90 seconds...
+Number of request: 16329
+Number of proccessed request: 10707
+Current queue size: 0
+Request/sec: 181.0
+Proccess/sec: 118.0
+Server utilization: 0.6519337016574586
+Probability of k message in server queue: 0.040990115001327924
+Avarage number of message in the queue: 1.873015873015873
+Actual Avarage queue size: 0.0
+
+Stats at Time: 100 seconds...
+Number of request: 16329
+Number of proccessed request: 10707
+Current queue size: 0
+Request/sec: 163.0
+Proccess/sec: 107.0
+Server utilization: 0.656441717791411
+Probability of k message in server queue: 0.041877552235117195
+Avarage number of message in the queue: 1.9107142857142856
+Actual Avarage queue size: 0.0
+
+Stats at Time: 110 seconds...
+Number of request: 16329
+Number of proccessed request: 10707
+Current queue size: 0
+Request/sec: 148.0
+Proccess/sec: 97.0
+Server utilization: 0.6554054054054054
+Probability of k message in server queue: 0.041673363579980076
+Avarage number of message in the queue: 1.9019607843137252
+Actual Avarage queue size: 0.0
+
+Stats at Time: 120 seconds...
+Number of request: 16329
+Number of proccessed request: 10707
+Current queue size: 0
+Request/sec: 136.0
+Proccess/sec: 89.0
+Server utilization: 0.6544117647058824
+Probability of k message in server queue: 0.04147767849470773
+Avarage number of message in the queue: 1.8936170212765957
+Actual Avarage queue size: 0.0
