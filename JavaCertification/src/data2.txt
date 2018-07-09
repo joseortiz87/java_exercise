@@ -1,0 +1,6 @@
+Hey how are you ?
+This count the repeated words
+in each paragraph
+are there some repeated words
+are you sure ?
+.
