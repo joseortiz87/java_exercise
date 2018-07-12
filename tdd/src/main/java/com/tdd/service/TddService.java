@@ -43,7 +43,7 @@ public class TddService {
 	}
 	
 	public void executeHack(int pool,int loop){
-		ExecutorService executor = Executors.newFixedThreadPool(pool);
+		ExecutorService executor = Executors.newCachedThreadPool();
         for (int i = 0; i < loop; i++) {
           Runnable worker = new HackThread(i + "");
           executor.execute(worker);
