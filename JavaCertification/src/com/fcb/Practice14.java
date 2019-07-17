@@ -33,7 +33,7 @@ public class Practice14 {
     }
 
     static String abbreviation(String a, String b) {
-        if(a.length() < b.length()){
+        if(a.length() < b.length()) {
             return "No";
         }
 
