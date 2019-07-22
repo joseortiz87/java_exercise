@@ -11,6 +11,10 @@ public class PathSequence {
                 new String [] {"/path","/co","/pink","/green","/blue","/red"},
                 new String [] {"/a","/c","h","/pink","/green","/blue"}
         ));
+        System.out.println(longestSequence(
+                new String [] {"/path","/co","/pink","/green","/blue","/red","/a"},
+                new String [] {"/a"}
+        ));
     }
 
     public static List<String> longestSequence(String [] user0,String [] user1){
